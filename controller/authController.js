@@ -14,6 +14,7 @@ exports.register = async (req, res) => {
     }
 };
 
+
 // Login user
 exports.login = async (req, res) => {
     try {
@@ -24,6 +25,44 @@ exports.login = async (req, res) => {
         }
         const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Get all users
+exports.getUsers = async (req, res) => {
+    try {
+        const users = await User.findAll(); // Mengambil semua pengguna
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+exports.getCurrentUser = async (req, res) => {
+    try {
+        // Ambil token dari header
+        const token = req.headers.authorization?.split(' ')[1];
+
+        if (!token) {
+            return res.status(401).json({ error: 'No token provided' });
+        }
+
+        // Verifikasi token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        // Ambil pengguna berdasarkan ID dari token
+        const user = await User.findByPk(decoded.id);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json({
+            id: user.id,
+            username: user.username
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

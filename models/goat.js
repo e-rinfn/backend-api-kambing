@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         tanggalLahir: DataTypes.DATE,
         nama: DataTypes.STRING,
         bobot: DataTypes.FLOAT,
-        kelamin: DataTypes.ENUM('jantan', 'betina'),
+        kelamin: DataTypes.STRING,
         jenis: DataTypes.STRING,
         induk: DataTypes.STRING,
         pejantan: DataTypes.STRING,

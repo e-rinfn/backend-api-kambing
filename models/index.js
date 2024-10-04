@@ -13,6 +13,7 @@ db.sequelize = sequelize;
 db.User = require('./user')(sequelize, Sequelize);
 db.Goat = require('./goat')(sequelize, Sequelize);
 db.Care = require('./care')(sequelize, Sequelize);
+db.WeightHistory = require('./weightHistory')(sequelize, Sequelize);
 
 // Define relationships
 db.User.hasMany(db.Goat);
@@ -20,5 +21,8 @@ db.Goat.belongsTo(db.User);
 
 db.Goat.hasMany(db.Care);
 db.Care.belongsTo(db.Goat);
+
+db.Goat.hasMany(db.WeightHistory);
+db.WeightHistory.belongsTo(db.Goat);
 
 module.exports = db;
